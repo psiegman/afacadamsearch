@@ -1,5 +1,4 @@
 import requests
-import gzip
 import json
 
 page_size = 10
@@ -7,7 +6,8 @@ current_page = 0
 date_from = '01-04-2022'
 date_to = '02-04-2022'
 
-def log_debug():
+def switch_on_http_debug():
+    """Switches on http debugging"""
     import logging
     from http.client import HTTPConnection  # py3
 
@@ -23,6 +23,7 @@ def log_debug():
     HTTPConnection.debuglevel = 1
 
 def get_cases(page, date_from, date_to):
+    """Gets the next page of cases (server-side hard-coded to a pagesize of 10)"""
     headers = {
         'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:98.0) Gecko/20100101 Firefox/98.0',
         'Accept': 'application/json, text/plain, */*',
@@ -66,6 +67,7 @@ def get_cases(page, date_from, date_to):
 
 
 def process_cases(cases):
+    """Print case info to stdout"""
     for hit in cases:
         case = hit['_source']
         print('')
@@ -74,7 +76,7 @@ def process_cases(cases):
         print(f"Description:\n{case['Description']}")
 
 
-#log_debug()
+#switch_on_http_debug()
 cases = get_cases(current_page, date_from, date_to)
 while cases:
     process_cases(cases)
